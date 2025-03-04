@@ -53,11 +53,11 @@
 
 // a. Hint: follow the pattern.
 variable1 = 1;
-variable2 = ;
-variable3 3;
+variable2 = 2;
+variable3 = 3;
 
 // b. Hint: This function needs a name after the word function.
-function () {
+function thisIsAFunction() {
   console.log("Hello!");
 }
 
