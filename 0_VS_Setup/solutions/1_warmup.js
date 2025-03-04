@@ -187,6 +187,8 @@ for (let i = 0; i < 10; i++) {
     console.log(i + 1 + ': ' + outcome);
 }
 console.log('Mike drop.');
+console.log('I love algorithm.');
+console.log('I love algorithm very much.');
 
 // Did you get this error:
 // ReferenceError: outcome is not defined
