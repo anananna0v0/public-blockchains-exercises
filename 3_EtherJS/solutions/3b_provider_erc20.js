@@ -67,6 +67,6 @@ const link = async () => {
     console.log(ethers.formatEther(linkBalance));
 };
 
-// link();
+link();
 
 

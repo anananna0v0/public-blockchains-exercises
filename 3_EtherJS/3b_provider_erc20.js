@@ -22,11 +22,11 @@ pathToDotEnv = path.join(__dirname, '..', '..', '.env');
 // console.log(pathToDotEnv);
 require("dotenv").config({ path: pathToDotEnv });
 
-const ethers = require("ethers");
+const ethers = require("ethers"); // 在 Node.js 環境中引入 Ethers.js 函式庫的標準寫法
 
-const providerKey = process.env.ALCHEMY_KEY;
+const providerKey = process.env.ALCHEMY_KEY; // process.env 是 Node.js 的內建全域 (global) 物件 — process 的屬性之一
 
-const sepoliaUrl = `${process.env.ALCHEMY_SEPOLIA_API_URL}${providerKey}`;
+const sepoliaUrl = `${process.env.ALCHEMY_SEPOLIA_API_URL}${providerKey}`; //JavaScript模板字串：1.使用 反引號 (``) 而非普通引號 (' 或 ") 2.${} 用來將變數或運算結果嵌入到字串中
 // console.log(sepoliaUrl);
 const sepoliaProvider = new ethers.JsonRpcProvider(sepoliaUrl);
 
@@ -45,7 +45,7 @@ const sepoliaProvider = new ethers.JsonRpcProvider(sepoliaUrl);
 // https://faucets.chain.link/sepolia
 // Then check the transaction: with which contract did it interact?
 
-const linkAddress = "";
+const linkAddress = "0x779877A7B0D9E8603169DdbD7836e478b4624789"; // https://sepolia.etherscan.io/tx/0xfbb47910022ab41a746030b02903515dab858e5d84581690ef07fe1db4a040cb
 
 // At the address, there is only bytecode. So we need to tell Ethers JS, what
 // methods can be invoked. To do so, we pass the Application Binary Interface
@@ -60,11 +60,39 @@ const linkABI = require('./link_abi.json');
 // Hint2: want to try it with your own address? Get some LINK ERC20 tokens: 
 // https://faucets.chain.link/sepolia
 
-const link = async () => {
+// const link = async () => {
    
-    // Your code here!
+//     // Your code here!
+// };
+
+const link = async () => {
+    try {
+        // 創建 LINK 合約實例
+        const linkContract = new ethers.Contract(linkAddress, linkABI, sepoliaProvider);
+
+        // 查詢 ENS 名稱轉換成以太坊地址
+        const unimaAddress = await sepoliaProvider.resolveName("unima.eth");
+        const vitalikAddress = await sepoliaProvider.resolveName("vitalik.eth");
+
+        // 檢查 ENS 是否成功解析
+        if (!unimaAddress || !vitalikAddress) {
+            console.error("ENS 名稱解析失敗，請確認 ENS 名稱是否正確。");
+            return;
+        }
+
+        // 查詢 LINK 餘額
+        const unimaBalance = await linkContract.balanceOf(unimaAddress);
+        const vitalikBalance = await linkContract.balanceOf(vitalikAddress);
+
+        // 格式化並輸出結果
+        console.log(`LINK 餘額 (unima.eth): ${ethers.utils.formatUnits(unimaBalance, 18)} LINK`);
+        console.log(`LINK 餘額 (vitalik.eth): ${ethers.utils.formatUnits(vitalikBalance, 18)} LINK`);
+
+    } catch (error) {
+        console.error("❗ 錯誤: ", error);
+    }
 };
 
-
-// link();
+// 執行函數
+link();
 
