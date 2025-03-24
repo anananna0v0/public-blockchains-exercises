@@ -18,9 +18,13 @@ const path = require('path');
 
 // Require packages.
 
-pathToDotEnv = path.join(__dirname, '..', '..', '.env');
-// console.log(pathToDotEnv);
-require("dotenv").config({ path: pathToDotEnv });
+pathToDotEnv = path.join(__dirname,'..','.env'); // 指定 .env 檔案的路徑
+
+require("dotenv").config({ path: pathToDotEnv }); // 1.require("dotenv") → 引入 dotenv 套件 2..config() → dotenv 的初始化方法，負責將 .env 檔案中的變數載入到 process.env 3.{ path: pathToDotEnv } → 指定 .env 檔案的位置
+
+console.log(pathToDotEnv); // 確認 pathToDotEnv 是否正確
+console.log("🔍 ALCHEMY_KEY:", process.env.ALCHEMY_KEY); // 驗證 .env 變數是否成功加載
+console.log("🔍 ALCHEMY_SEPOLIA_API_URL:", process.env.ALCHEMY_SEPOLIA_API_URL); // 驗證 .env 變數是否成功加載
 
 const ethers = require("ethers"); // 在 Node.js 環境中引入 Ethers.js 函式庫的標準寫法
 
@@ -65,34 +69,34 @@ const linkABI = require('./link_abi.json');
 //     // Your code here!
 // };
 
-const link = async () => {
-    try {
-        // 創建 LINK 合約實例
-        const linkContract = new ethers.Contract(linkAddress, linkABI, sepoliaProvider);
+// const link = async () => {
+//     try {
+//         // 創建 LINK 合約實例
+//         const linkContract = new ethers.Contract(linkAddress, linkABI, sepoliaProvider);
 
-        // 查詢 ENS 名稱轉換成以太坊地址
-        const unimaAddress = await sepoliaProvider.resolveName("unima.eth");
-        const vitalikAddress = await sepoliaProvider.resolveName("vitalik.eth");
+//         // 查詢 ENS 名稱轉換成以太坊地址
+//         const unimaAddress = await sepoliaProvider.resolveName("unima.eth");
+//         const vitalikAddress = await sepoliaProvider.resolveName("vitalik.eth");
 
-        // 檢查 ENS 是否成功解析
-        if (!unimaAddress || !vitalikAddress) {
-            console.error("ENS 名稱解析失敗，請確認 ENS 名稱是否正確。");
-            return;
-        }
+//         // 檢查 ENS 是否成功解析
+//         if (!unimaAddress || !vitalikAddress) {
+//             console.error("ENS 名稱解析失敗，請確認 ENS 名稱是否正確。");
+//             return;
+//         }
 
-        // 查詢 LINK 餘額
-        const unimaBalance = await linkContract.balanceOf(unimaAddress);
-        const vitalikBalance = await linkContract.balanceOf(vitalikAddress);
+//         // 查詢 LINK 餘額
+//         const unimaBalance = await linkContract.balanceOf(unimaAddress);
+//         const vitalikBalance = await linkContract.balanceOf(vitalikAddress);
 
-        // 格式化並輸出結果
-        console.log(`LINK 餘額 (unima.eth): ${ethers.utils.formatUnits(unimaBalance, 18)} LINK`);
-        console.log(`LINK 餘額 (vitalik.eth): ${ethers.utils.formatUnits(vitalikBalance, 18)} LINK`);
+//         // 格式化並輸出結果
+//         console.log(`LINK 餘額 (unima.eth): ${ethers.utils.formatUnits(unimaBalance, 18)} LINK`);
+//         console.log(`LINK 餘額 (vitalik.eth): ${ethers.utils.formatUnits(vitalikBalance, 18)} LINK`);
 
-    } catch (error) {
-        console.error("❗ 錯誤: ", error);
-    }
-};
+//     } catch (error) {
+//         console.error("❗ 錯誤: ", error);
+//     }
+// };
 
 // 執行函數
-link();
+// link();
 
